@@ -298,7 +298,7 @@ jobs:
         WINDOWS:
           - {ARCH: 'x86', WINDOWS: 'win32', OS: windows-latest}
           - {ARCH: 'x64', WINDOWS: 'win64', OS: windows-latest}
-          - {ARCH: 'arm64', WINDOWS: 'win-arm64', OS: windows-11-arm}
+          - {ARCH: 'arm64', WINDOWS: 'arm64', OS: windows-11-arm}
         PYTHON:
           - {VERSION: "3.7", NOXSESSION: "tests-nocoverage"}
           - {VERSION: "3.11", NOXSESSION: "tests-nocoverage"}
