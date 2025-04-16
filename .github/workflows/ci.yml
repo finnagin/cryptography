@@ -325,7 +325,7 @@ jobs:
         name: Setup rustup
         id: setup-rustup
         run: |
-            Invoke-WebRequest https://static.rust-lang.org/rustup/dist/aarch64-pc-windows-msvc/rustup-init.exe
+            Invoke-WebRequest https://static.rust-lang.org/rustup/dist/aarch64-pc-windows-msvc/rustup-init.exe -OutFile .\rustup-init.exe
             .\rustup-init.exe -y --default-host aarch64-pc-windows-msvc --default-toolchain aarch64-pc-windows-msvc
       - run: rustup component add llvm-tools-preview
       - name: Cache rust and pip
