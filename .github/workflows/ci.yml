@@ -321,10 +321,12 @@ jobs:
           cache: pip
           cache-dependency-path: ci-constraints-requirements.txt
         timeout-minutes: 3
-      - name: Setup rust
+      - if: ${{ matrix.WINDOWS.OS == 'windows-11-arm' }}
+        name: Setup rust
         id: setup-rust
-        if: ${{ matrix.WINDOWS.OS == windows-11-arm }}
         uses: actions-rs/toolchain@v1
+        with:
+          target: aarch64-pc-windows-msvc
       - run: rustup component add llvm-tools-preview
       - name: Cache rust and pip
         uses: ./.github/actions/cache
