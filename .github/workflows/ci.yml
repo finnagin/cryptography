@@ -328,6 +328,7 @@ jobs:
         with:
           toolchain: stable
           target: aarch64-pc-windows-msvc
+          default: true
       - run: rustup component add llvm-tools-preview
       - name: Cache rust and pip
         uses: ./.github/actions/cache
