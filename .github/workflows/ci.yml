@@ -326,6 +326,7 @@ jobs:
         id: setup-rust
         uses: actions-rs/toolchain@v1
         with:
+          toolchain: stable
           target: aarch64-pc-windows-msvc
       - run: rustup component add llvm-tools-preview
       - name: Cache rust and pip
