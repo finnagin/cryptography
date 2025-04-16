@@ -327,6 +327,7 @@ jobs:
         run: |
             Invoke-WebRequest https://static.rust-lang.org/rustup/dist/aarch64-pc-windows-msvc/rustup-init.exe -OutFile .\rustup-init.exe
             .\rustup-init.exe -y
+            Add-Content $env:GITHUB_PATH "$env:USERPROFILE\.cargo\bin" 
       - run: rustup component add llvm-tools-preview
       - name: Cache rust and pip
         uses: ./.github/actions/cache
