@@ -53,6 +53,10 @@ Changelog
 * Added support for the ``CRYPTOGRAPHY_BUILD_OPENSSL_NO_LEGACY`` environment
   variable during build time, which prevents the library from ever attempting
   to load the legacy provider.
+* Added support for the :class:`~cryptography.x509.PrivateKeyUsagePeriod` X.509 extension.
+  This extension defines the period during which the private key corresponding
+  to the certificate's public key may be used.
+* Added support for compiling against `aws-lc`_.
 
 .. _v44-0-2:
 
@@ -2625,3 +2629,4 @@ Changelog
 .. _`as documented here`: https://docs.rs/openssl/latest/openssl/#automatic
 .. _`main`: https://github.com/pyca/cryptography/
 .. _`cffi`: https://cffi.readthedocs.io/
+.. _`aws-lc`: https://github.com/aws/aws-lc
