@@ -34,7 +34,7 @@ jobs:
           ref: ${{ github.event.inputs.version || github.ref }}
           persist-credentials: false
 
-      - uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: "3.13"
         timeout-minutes: 3
@@ -66,7 +66,7 @@ jobs:
       matrix:
         PYTHON:
           - { VERSION: "cp311-cp311", ABI_VERSION: 'py37' }
-          - { VERSION: "cp311-cp311", ABI_VERSION: 'py39' }
+          - { VERSION: "cp311-cp311", ABI_VERSION: 'py311' }
           - { VERSION: "pp310-pypy310_pp73" }
           - { VERSION: "pp311-pypy311_pp73" }
         MANYLINUX:
@@ -131,7 +131,7 @@ jobs:
             ${{ env.BUILD_REQUIREMENTS_PATH }}
           sparse-checkout-cone-mode: false
 
-      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: cryptography-sdist
       - run: mkdir tmpwheelhouse
@@ -188,7 +188,7 @@ jobs:
             # build against
             _PYTHON_HOST_PLATFORM: 'macosx-10.9-universal2'
           - VERSION: '3.11'
-            ABI_VERSION: 'py39'
+            ABI_VERSION: 'py311'
             # Despite the name, this is built for the macOS 11 SDK on arm64 and 10.9+ on intel
             DOWNLOAD_URL: 'https://www.python.org/ftp/python/3.11.3/python-3.11.3-macos11.pkg'
             BIN_PATH: '/Library/Frameworks/Python.framework/Versions/3.11/bin/python3'
@@ -229,7 +229,7 @@ jobs:
           PYTHON_DOWNLOAD_URL: ${{ matrix.PYTHON.DOWNLOAD_URL }}
         if: contains(matrix.PYTHON.VERSION, 'pypy') == false
       - name: Setup pypy
-        uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: ${{ matrix.PYTHON.VERSION }}
         if: contains(matrix.PYTHON.VERSION, 'pypy')
@@ -247,7 +247,7 @@ jobs:
           toolchain: stable
           # Add the arm64 target in addition to the native arch (x86_64)
           target: aarch64-apple-darwin
-      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: cryptography-sdist
 
@@ -294,7 +294,7 @@ jobs:
           - {ARCH: 'x64', WINDOWS: 'win64', RUST_TRIPLE: 'x86_64-pc-windows-msvc'}
         PYTHON:
           - {VERSION: "3.11", "ABI_VERSION": "py37"}
-          - {VERSION: "3.11", "ABI_VERSION": "py39"}
+          - {VERSION: "3.11", "ABI_VERSION": "py311"}
           - {VERSION: "pypy-3.10"}
           - {VERSION: "pypy-3.11"}
         exclude:
@@ -316,12 +316,12 @@ jobs:
             ${{ env.UV_REQUIREMENTS_PATH }}
           sparse-checkout-cone-mode: false
 
-      - uses: actions/download-artifact@95815c38cf2ff2164869cbab79da8d1f422bc89e # v4.2.1
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4.3.0
         with:
           name: cryptography-sdist
 
       - name: Setup python
-        uses: actions/setup-python@8d9ed9ac5c53483de85588cdf95a591a75ab9f55 # v5.5.0
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5.6.0
         with:
           python-version: ${{ matrix.PYTHON.VERSION }}
           architecture: ${{ matrix.WINDOWS.ARCH }}

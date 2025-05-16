@@ -10,6 +10,11 @@ Changelog
 
 * Support for Python 3.7 is deprecated and will be removed in the next
   ``cryptography`` release.
+* Added support for serialization of PKCS#12 Java truststores in
+  :func:`~cryptography.hazmat.primitives.serialization.pkcs12.serialize_java_truststore`
+* Added :meth:`~cryptography.hazmat.primitives.kdf.argon2.Argon2id.derive_phc_encoded` and
+  :meth:`~cryptography.hazmat.primitives.kdf.argon2.Argon2id.verify_phc_encoded` methods
+  to support password hashing in the PHC string format
 * Added support for PKCS7 decryption and encryption using AES-256 as the
   content algorithm, in addition to AES-128.
 * **BACKWARDS INCOMPATIBLE:** Made SSH private key loading more consistent with
@@ -57,6 +62,24 @@ Changelog
   This extension defines the period during which the private key corresponding
   to the certificate's public key may be used.
 * Added support for compiling against `aws-lc`_.
+* Parsing X.509 structures now more strictly enforces that ``Name`` structures
+  do not have malformed ASN.1.
+* We now publish ``py311`` wheels that utilize the faster ``pyo3::buffer::PyBuffer``
+  interface, resulting in significantly improved performance for operations
+  involving small buffers.
+* Added :func:`~cryptography.hazmat.primitives.serialization.ssh_key_fingerprint`
+  for computing fingerprints of SSH public keys.
+* Added support for deterministic ECDSA signing via the new keyword-only argument
+  ``ecdsa_deterministic`` in :meth:`~cryptography.x509.CertificateBuilder.sign`,
+  :meth:`~cryptography.x509.CertificateRevocationListBuilder.sign`
+  and :meth:`~cryptography.x509.CertificateSigningRequestBuilder.sign`.
+
+.. _v44-0-3:
+
+44.0.3 - 2025-05-02
+~~~~~~~~~~~~~~~~~~~
+
+* Fixed compilation when using LibreSSL 4.1.0.
 
 .. _v44-0-2:
 

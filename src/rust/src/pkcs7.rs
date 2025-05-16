@@ -517,6 +517,7 @@ fn sign_and_serialize<'p>(
                         py_private_key.clone(),
                         py_hash_alg.clone(),
                         rsa_padding.clone(),
+                        None,
                         &data_with_header,
                     )?,
                 )
@@ -566,6 +567,7 @@ fn sign_and_serialize<'p>(
                         py_private_key.clone(),
                         py_hash_alg.clone(),
                         rsa_padding.clone(),
+                        None,
                         &signed_data,
                     )?,
                 )
@@ -716,7 +718,7 @@ fn load_pkcs7_certificates(
         let nid_string = nid.map_or("empty".to_string(), |n| n.as_raw().to_string());
         return Err(CryptographyError::from(
             exceptions::UnsupportedAlgorithm::new_err((
-                format!("Only basic signed structures are currently supported. NID for this data was {}", nid_string),
+                format!("Only basic signed structures are currently supported. NID for this data was {nid_string}"),
                 exceptions::Reasons::UNSUPPORTED_SERIALIZATION,
             )),
         ));

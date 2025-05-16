@@ -426,6 +426,37 @@ DSA keys look almost identical but begin with ``ssh-dss`` rather than
     :raises cryptography.exceptions.UnsupportedAlgorithm: If the serialized
         key is of a type that is not supported.
 
+
+.. function:: ssh_key_fingerprint(key, hash_algorithm)
+
+    .. versionadded:: 45.0.0
+
+    Computes the fingerprint of an SSH public key. The fingerprint is the raw
+    bytes of the hash, depending on your use you may need to encode the data as
+    base64 or hex.
+
+    :param key: The public key to compute the fingerprint for.
+    :type key: One of :data:`SSHPublicKeyTypes`
+
+    :param hash_algorithm: The hash algorithm to use, either ``MD5()`` or
+        ``SHA256()``.
+
+    :return: The key fingerprint.
+    :rtype: bytes
+
+    .. code-block:: pycon
+
+        >>> from cryptography.hazmat.primitives.serialization import load_ssh_public_key, ssh_key_fingerprint
+        >>> key_data = b"ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIAhVNvf1vigXfagQXKjdKN5zEF12KWVMVdDrU3sVLhgd user@example.com"
+        >>> public_key = load_ssh_public_key(key_data)
+        >>> md5_fingerprint = ssh_key_fingerprint(public_key, hashes.MD5())
+        >>> md5_fingerprint
+        b'\x95\xf6\xc0\xe3so\xaen\xcc\x98\xbb\xf4\xd8BJ\x15'
+        >>> sha256_fingerprint = ssh_key_fingerprint(public_key, hashes.SHA256())
+        >>> sha256_fingerprint
+        b'R\x0f*!\x99f9\x9a\xcd\x98[\xe8-&\xbah\xa6x\x96\x87\xb3\xf9\xe0\x9b\xb1,\xcc\xbdt\xd4\xc3\xb7'
+
+
 OpenSSH Private Key
 ~~~~~~~~~~~~~~~~~~~
 
@@ -946,11 +977,53 @@ file suffix.
         ...     b"friendlyname", key, cert, None, encryption
         ... )
 
-.. class:: PKCS12Certificate
+.. function:: serialize_java_truststore(pkcs12_certs, encryption_algorithm)
+
+    .. versionadded:: 45.0.0
+
+    .. warning::
+
+        PKCS12 encryption is typically not secure and should not be used as a
+        security mechanism. Wrap a PKCS12 blob in a more secure envelope if you
+        need to store or send it safely.
+
+    Serialize a PKCS12 blob containing provided certificates. Java expects an
+    internal flag to denote truststore usage, which this function adds.
+
+    :param certs: A set of certificates to also include in the structure.
+    :type certs:
+
+        A list of :class:`~cryptography.hazmat.primitives.serialization.pkcs12.PKCS12Certificate`
+        instances.
+
+    :param encryption_algorithm: The encryption algorithm that should be used
+        for the key and certificate. An instance of an object conforming to the
+        :class:`~cryptography.hazmat.primitives.serialization.KeySerializationEncryption`
+        interface. PKCS12 encryption is typically **very weak** and should not
+        be used as a security boundary.
+
+    :return bytes: Serialized PKCS12.
+
+    .. doctest::
+
+        >>> from cryptography import x509
+        >>> from cryptography.hazmat.primitives.serialization import BestAvailableEncryption, pkcs12
+        >>> cert = x509.load_pem_x509_certificate(ca_cert)
+        >>> p12 = pkcs12.serialize_java_truststore(
+        ...     [pkcs12.PKCS12Certificate(cert, b"friendlyname")], BestAvailableEncryption(b"password")
+        ... )
+
+.. class:: PKCS12Certificate(cert, friendly_name=None)
 
     .. versionadded:: 36.0.0
 
     Represents additional data provided for a certificate in a PKCS12 file.
+
+    :param cert: The certificate to associate with the additional data.
+    :type cert: :class:`~cryptography.x509.Certificate`
+
+    :param friendly_name: An optional friendly name for the certificate.
+    :type friendly_name: bytes or None
 
     .. attribute:: certificate
 
