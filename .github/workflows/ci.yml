@@ -346,16 +346,21 @@ jobs:
       - uses: ./.github/actions/upload-coverage
 
   windows:
-    runs-on: windows-latest
+    runs-on: ${{ matrix.WINDOWS.OS }}
     strategy:
       fail-fast: false
       matrix:
         WINDOWS:
-          - {ARCH: 'x86', WINDOWS: 'win32'}
-          - {ARCH: 'x64', WINDOWS: 'win64'}
+          - {ARCH: 'x86', WINDOWS: 'win32', OS: windows-latest}
+          - {ARCH: 'x64', WINDOWS: 'win64', OS: windows-latest}
+          - {ARCH: 'arm64', WINDOWS: 'arm64', OS: windows-11-arm}
         PYTHON:
           - {VERSION: "3.8", NOXSESSION: "tests-nocoverage"}
+          - {VERSION: "3.11", NOXSESSION: "tests-nocoverage"}
           - {VERSION: "3.13", NOXSESSION: "tests"}
+        exclude:
+          - {WINDOWS: {OS: windows-11-arm}, PYTHON: {VERSION: "3.7"}}
+          - {WINDOWS: {OS: windows-latest}, PYTHON: {VERSION: "3.11"}}
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
@@ -371,6 +376,15 @@ jobs:
           cache: pip
           cache-dependency-path: ci-constraints-requirements.txt
         timeout-minutes: 3
+      # rust toolchain is not currently installed on windows arm64 images https://github.com/actions/partner-runner-images/issues/77
+      - if: ${{ runner.os == 'Windows' && runner.arch == 'ARM64' }}
+        name: Setup rust
+        id: setup-rust
+        shell: pwsh
+        run: |
+          Invoke-WebRequest https://static.rust-lang.org/rustup/dist/aarch64-pc-windows-msvc/rustup-init.exe -OutFile ${{ runner.temp }}\rustup-init.exe
+          ${{ runner.temp }}\rustup-init.exe -y
+          Add-Content $env:GITHUB_PATH "$env:USERPROFILE\.cargo\bin"
       - run: rustup component add llvm-tools-preview
       - name: Cache rust and pip
         uses: ./.github/actions/cache
